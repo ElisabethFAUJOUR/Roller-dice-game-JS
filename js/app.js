@@ -31,7 +31,7 @@ function addDice(number) {
     player.appendChild(dice); /*Création de la div class = "dice"*/
 }
 
-/* Fonction pour CREER LE NOMBRE DE DES ALEATOIRES + AFFICHER LES DES*/
+/* Fonction pour EFFECTUER LE LANCER DE DES*/
 function rollDice() {
     const numberOfDice = parseInt(prompt(`Combien de dés voulez-vous lancer ?`));
     if (isNaN(numberOfDice) || numberOfDice <= 0) {
@@ -48,4 +48,6 @@ function rollDice() {
 /*Appel de la fontion pour afficher une face au chargement de la page*/
 rollDice(); 
 
+
+/*Créer la div du dealer*/
 
