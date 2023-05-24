@@ -35,8 +35,8 @@ function rollDice() {
     for (let i = 0; i < numberOfDice; i++) {
         const randomIntPlayer = generateRandomInt(); /* Génération du nombre aléatoire pour le joueur */
         const randomIntDealer = generateRandomInt(); /* Génération du nombre aléatoire pour le dealer */
-        addDice(randomIntPlayer, 'player'); /* Création du dé pour le joueur */
-        addDice(randomIntDealer, 'dealer'); /* Création du dé pour le dealer */
+        addDice(randomIntPlayer, 'player'); /* Création du dé pour le joueur avec le selecteur id getElementById('player')*/
+        addDice(randomIntDealer, 'dealer'); /* Création du dé pour le dealer avec le selecteur id getElementById('dealer')*/
     }
 }
 

@@ -1,4 +1,4 @@
-// //ETAPE 1 CREATION DU DE
+//ETAPE 1 CREATION DU DE
 
 // /*Création de la div pour le dé "dice"*/
 // const diceDiv = document.createElement('div'); 
@@ -14,24 +14,26 @@
 
 
 
-/*Selection de l'id #player dans le HTML*/
-const player = document.getElementById('player'); 
+//ETAPE 2 TIRER UN NOMBRE ALEATOIRE
 
-/*Fonction pour GENERER UN NOMBRE ALEATOIRE ENTRE 1 ET 6*/
-function generateRandomInt() {
-    return Math.floor(Math.random() * 6) + 1;
+/*Fonction pour Générer un nombre aléatoire entre 1 et 6 (valeur du dé)*/
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }  
 
-/*Fonction pour CREER UN DE ALEATOIRE*/
-function addDice(number) {
+/*Fonction pour Afficher un la face du dé correspondante au nb généré aléatoirement*/
+function createDice(number) {
     const dice = document.createElement('div'); /*Création de la div pour le dé "dice"*/
     dice.classList.add('dice'); /*Ajout de la class = "dice" à la div*/
-    const position = (number - 1) * -100; /*Calcul du décalage horizontal en pixels*/
+    const position = (number - 1) * -100; /*Calcul du décalage horizontal en pixels avec -1 pour être entre 0 et 500px*/
     dice.style.backgroundPositionX = `${position}px`; /*Modification du background*/
+    const player = document.getElementById('player');
     player.appendChild(dice); /*Création de la div class = "dice"*/
 }
 
-/* Fonction pour EFFECTUER LE LANCER DE DES*/
+/* Fonction pour Effectuer le lancer de dés avec le nb de dés démandé*/
 function rollDice() {
     const numberOfDice = parseInt(prompt(`Combien de dés voulez-vous lancer ?`));
     if (isNaN(numberOfDice) || numberOfDice <= 0) {
@@ -40,14 +42,14 @@ function rollDice() {
     }
 
     for (let i = 0; i < numberOfDice; i++) {
-        const randomInt = generateRandomInt();/*Génération du nombre aléatoire*/
-        addDice(randomInt);/*Creation du dé en fonction du nombre aléatoire*/
+        const diceValue = getRandomInt(1, 6);/*Génération du nombre aléatoire pour donné la valeur du dé*/
+        createDice(diceValue);/*Creation du dé en fonction du nombre aléatoire généré : 6 => face 6*/
       }
 }
 
-/*Appel de la fontion pour afficher une face au chargement de la page*/
+/*Appel de la fontion pour afficher le/les dé(s) au chargement de la page*/
 rollDice(); 
 
 
-/*Créer la div du dealer*/
+
 
