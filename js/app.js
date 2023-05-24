@@ -16,12 +16,17 @@
 
 //ETAPE 2 TIRER UN NOMBRE ALEATOIRE
 
-/*Fonction pour Générer un nombre aléatoire entre 1 et 6 (valeur du dé)*/
+/*Fonction pour Générer un nombre aléatoire*/
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
 }  
+
+/*Fonction pour Générer un nombre aléatoire entre 1 et 6 (valeur du dé)*/
+function getRandomDice(){
+    return getRandomInt(1,6);
+  }  
 
 /*Fonction pour Afficher un la face du dé correspondante au nb généré aléatoirement*/
 function createDice(number) {
@@ -42,7 +47,7 @@ function rollDice() {
     }
 
     for (let i = 0; i < numberOfDice; i++) {
-        const diceValue = getRandomInt(1, 6);/*Génération du nombre aléatoire pour donné la valeur du dé*/
+        const diceValue = getRandomDice();/*Génération du nombre aléatoire pour donner la valeur du dé*/
         createDice(diceValue);/*Creation du dé en fonction du nombre aléatoire généré : 6 => face 6*/
       }
 }

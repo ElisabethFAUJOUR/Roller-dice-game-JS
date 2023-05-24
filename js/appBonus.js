@@ -1,13 +1,20 @@
 /* Selection de l'id #player dans le HTML */
 const player = document.getElementById('player');
 
-/* Fonction pour générer un nombre aléatoire entre 1 et 6 */
-function generateRandomInt() {
-    return Math.floor(Math.random() * 6) + 1;
-}
+/* Fonction pour générer un nombre aléatoire*/
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}  
+
+/*Fonction pour Générer un nombre aléatoire entre 1 et 6 (valeur du dé)*/
+function getRandomDice(){
+    return getRandomInt(1,6);
+  }  
 
 /* Fonction pour créer un dé aléatoire */
-function addDice(number, targetId) {
+function createDice(number, targetId) {
     const target = document.getElementById(targetId); /* Sélection de la div cible */
     const dice = document.createElement('div'); /* Création de la div pour le dé "dice" */
     dice.classList.add('dice'); /* Ajout de la classe "dice" à la div */
@@ -17,11 +24,11 @@ function addDice(number, targetId) {
 }
 
 /* Fonction pour créer la zone du dealer */
-function createDealerZone() {
-    const dealerZone = document.createElement('div'); /* Création de la div pour la zone du dealer */
-    dealerZone.classList.add('board', 'orange'); /* Ajout des classes "board" et "orange" à la div */
-    dealerZone.id = 'dealer'; /* Attribution de l'id "dealer" */
-    player.after(dealerZone); /* Ajout de la div après la div avec l'id "player" */
+function createDealerDiv() {
+    const dealerDiv = document.createElement('div'); /* Création de la div pour la zone du dealer */
+    dealerDiv.classList.add('board', 'orange'); /* Ajout des classes "board" et "orange" à la div */
+    dealerDiv.id = 'dealer'; /* Attribution de l'id "dealer" */
+    player.after(dealerDiv); /* Ajout de la div après la div avec l'id "player" */
 }
 
 /* Fonction pour effectuer le lancer de dés */
@@ -33,10 +40,10 @@ function rollDice() {
     }
 
     for (let i = 0; i < numberOfDice; i++) {
-        const randomIntPlayer = generateRandomInt(); /* Génération du nombre aléatoire pour le joueur */
-        const randomIntDealer = generateRandomInt(); /* Génération du nombre aléatoire pour le dealer */
-        addDice(randomIntPlayer, 'player'); /* Création du dé pour le joueur avec le selecteur id getElementById('player')*/
-        addDice(randomIntDealer, 'dealer'); /* Création du dé pour le dealer avec le selecteur id getElementById('dealer')*/
+        const randomIntPlayer = getRandomDice(); /* Génération du nombre aléatoire pour le joueur */
+        const randomIntDealer = getRandomDice(); /* Génération du nombre aléatoire pour le dealer */
+        createDice(randomIntPlayer, 'player'); /* Création du dé pour le joueur avec le selecteur id getElementById('player')*/
+        createDice(randomIntDealer, 'dealer'); /* Création du dé pour le dealer avec le selecteur id getElementById('dealer')*/
     }
 }
 
@@ -45,10 +52,3 @@ createDealerZone();
 
 /* Appel de la fonction pour afficher les dés */
 rollDice();
-
-
-/*Appel de la fontion pour afficher une face au chargement de la page*/
-rollDice(); 
-
-
-/*Créer la div du dealer*/
