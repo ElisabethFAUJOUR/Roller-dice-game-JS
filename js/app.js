@@ -1,10 +1,16 @@
 const app = {
+
+    playerElem: document.getElementById('player'),
+
+    // ---- init ----
+
     init: function () {
-        const player = document.getElementById('player');
-        app.createDealerDiv();
+        app.playerElem;
         app.rollDice();
-        app.handleClickButton();
+        app.listenToClickButton();
     },
+
+    // ---- functions ----
 
     /**
      * Generate a random number
@@ -18,7 +24,8 @@ const app = {
     },
 
     /**
-     * Generate a random number bewteen 1 and 6 
+     * Generate a random number 
+     * @returns {number} - random number bewteen 1 and 6 
      */
     getRandomDice() {
         return app.getRandomInt(1, 6);
@@ -26,29 +33,23 @@ const app = {
 
     /**
      * Create a random dice
+     * @param {number} number 
+     * @param {string} targetId 
      */
     createDice(number, targetId) {
-        const target = document.getElementById(targetId); /* Sélection de la div cible */
-        const dice = document.createElement('div'); /* Création de la div pour le dé "dice" */
-        dice.classList.add('dice'); /* Ajout de la classe "dice" à la div */
+        const targetElemn = document.getElementById(targetId); /* Sélection de la div cible */
+        const diceElem = document.createElement('div'); /* Création de la div pour le dé "dice" */
+        diceElem.classList.add('dice'); /* Ajout de la classe "dice" à la div */
         const position = (number - 1) * -100; /* Calcul du décalage horizontal en pixels */
-        dice.style.backgroundPositionX = `${position}px`; /* Modification du background */
-        target.appendChild(dice); /* Ajout de la div class="dice" à la cible */
+        diceElem.style.backgroundPositionX = `${position}px`; /* Modification du background */
+        targetElemn.appendChild(diceElem); /* Ajout de la div class="dice" à la cible */
     },
 
-    /**
-    * Create the dealer area 
-    */
-    createDealerDiv() {
-        const dealerDiv = document.createElement('div'); /* Création de la div pour la zone du dealer */
-        dealerDiv.classList.add('board', 'orange'); /* Ajout des classes "board" et "orange" à la div */
-        dealerDiv.id = 'dealer'; /* Attribution de l'id "dealer" */
-        player.after(dealerDiv); /* Ajout de la div après la div avec l'id "player" */
-    },
+    // ---- callback functions ----
 
     /** 
-    * Roll dices 
-    */
+     * Roll dices 
+     */
     rollDice() {
         const numberOfDice = parseInt(prompt(`Combien de dés voulez-vous lancer ?`));
         if (isNaN(numberOfDice) || numberOfDice <= 0) {
@@ -64,13 +65,14 @@ const app = {
         }
     },
 
+    // ---- listener events ----
 
     /** 
-    * Event click button to roll dices
-    */
-    handleClickButton() {
-        const button = document.getElementById('throw');
-        button.addEventListener('click', app.rollDice);
+     * Event click button to roll dices
+     */
+    listenToClickButton() {
+        const buttonElemn = document.getElementById('throw');
+        buttonElemn.addEventListener('click', app.rollDice);
     }
 };
 
