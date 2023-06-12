@@ -32,19 +32,26 @@ const game = {
     // ---- functions ----
 
     /**
-     * Change the div
+     * Start the game
      */
     start() {
         document.getElementById('welcome').classList.add('hidden');
         document.getElementById('app').classList.remove('hidden');
     },
 
+    /**
+     * Change the number of dices 
+     */
     changeNumber() {
         const diceNumberElement = document.getElementById('dice-number');
         game.nbDices = game.diceNumberInputElement.value;
         diceNumberElement.textContent = game.nbDices;
     },
 
+   /**
+    * Lauch the game
+    * @param {event} event submit form
+    */
     play(event) {
         event.preventDefault();
 
@@ -53,12 +60,12 @@ const game = {
             game.reset();
             game.playerScore = game.createAllDices('player');
             setTimeout(game.dealerPlay, 3000);
-            game.createCounter();
+            game.createTimer();
         }
     },
 
     /**
-     * Delete dices et reset score
+     * Reset score and game 
      */
     reset() {
         for (let boardIndex = 0; boardIndex < game.boardElement.length; boardIndex++) {
@@ -67,19 +74,19 @@ const game = {
     },
 
     /**
-     * Return a random number
+     * Generate a random number
      * @param {number} min 
      * @param {number} max 
-     * @returns 
+     * @returns {number} - random random
      */
     getRandom(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
     /**
-     * Roll dices et return total score 
-     * @param {*} player 
-     * @returns 
+     * Create all dices et return total score 
+     * @param {string} player - player or dealer
+     * @returns {number} - total score
      */
     createAllDices(player) {
         let score = 0;
@@ -92,9 +99,9 @@ const game = {
 
     // 
     /**
-     * Get player index (parameter) to increase his score
-     * @param {*} player 
-     * @returns 
+     * Create one dice and get its value for the player or dealer 
+     * @param {string} player - player or dealer
+     * @returns {number} - dice value 
      */
     createDice(player) {
         const diceElement = document.createElement('div');
@@ -108,15 +115,15 @@ const game = {
     },
 
     /**
-     * Roll dice dealer
+     * launch the game : roll the dices of player and dealer, get the scores and the result
      */
     dealerPlay() {
         const dealerScore = game.createAllDices('dealer');
 
-        if (dealerScore > game.playerScore) { // si le score de l'adversaire est plus élevé on a perdu
+        if (dealerScore > game.playerScore) { // si le score du dealer est plus élevé on a perdu
             game.defeat++;
         }
-        else if (dealerScore < game.playerScore) { // sinon on gagne
+        else if (dealerScore < game.playerScore) { // si le score du dealer est plus petit on gagne
             game.victory++;
         }
 
@@ -128,8 +135,8 @@ const game = {
 
     /**
      * Display the scores
-     * @param {string} board 
-     * @param {number} counter 
+     * @param {string} board - name of the board (player or dealer)
+     * @param {number} counter - counter of victories or defeats 
      */
     displayResult(board, counter) {
         const resultElement = document.createElement('div');
@@ -139,34 +146,34 @@ const game = {
     },
 
     /**
-     * Initialize counter
+     * Initialize timer (3 - 2 - 1)
      */
-    createCounter() {
-        game.counter = 3;
-        game.counterElement = document.createElement('div');
-        game.counterElement.textContent = game.counter;
-        game.counterElement.className = 'counter';
-        document.getElementById('app').appendChild(game.counterElement);
-        game.counterInterval = setInterval(game.countdown, 1000);
+    createTimer () {
+        game.timer = 3;
+        game.timerElement = document.createElement('div');
+        game.timerElement.textContent = game.timer;
+        game.timerElement.className = 'timer';
+        document.getElementById('app').appendChild(game.timerElement);
+        game.timerInterval = setInterval(game.timerDown, 1000);
     },
 
     /**
      * Decrement counter
      */
-    countdown() {
-        game.counter--;
-        game.counterElement.textContent = game.counter;
-        if (game.counter === 0) {
-            game.deleteCounter();
+    timerDown() {
+        game.timer--;
+        game.timerElement.textContent = game.timer;
+        if (game.timer === 0) {
+            game.deleteTimer();
         }
     },
 
     /**
      * Delete counter and stop 
      */
-    deleteCounter() {
-        clearInterval(game.counterInterval);
-        game.counterElement.remove();
+    deleteTimer () {
+        clearInterval(game.timerInterval);
+        game.timerElement.remove();
     },
 };
 
