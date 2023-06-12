@@ -2,11 +2,13 @@
 
 body {
   background-color: #f39c12;
+  height: 100vh;
 }
 
 #app {
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 
 #player {
@@ -42,6 +44,7 @@ body {
 }
 
 #welcome {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,10 +73,11 @@ body {
 
 #game {
   display: flex;
+  height: 80%;
 }
 
 .form {
-  height: 150px;
+  height: 20%;
   background: #111;
 }
 
