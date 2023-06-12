@@ -10,15 +10,27 @@
 
 <body>
     <!-- Eh toi là, inutile de modifier le HTML : l'objectif est d'insérer des élements via JS ! Bonne chance ! -->
-    <div id="app">
-        <label class="label" for="numberOfDice">Combien de dés voulez-vous lancer ?</label>
-        <input type="number" id="numberOfDice">
-        <button id="throw">Lancer les dés</button>
+    <div id="welcome">
+        <button id="play" class="btn" type="button">Jouer</button>
     </div>
-    <div class="game">
-        <div class="board" id="player"></div>
-        <div class="board" id="dealer"></div>
-        
+    <div id="app" class="hidden">
+        <div class="form">
+            <form id="game-form">
+                <input
+                    type="range"
+                    id="dice-number-input"
+                    value="3"
+                    min="1"
+                    max="20"
+                >
+                <span id="dice-number">3</span>
+                <button class="btn">Valider le nombre de dés et lancer</button>
+            </form>
+        </div>
+        <div id="game">
+            <div class="board" id="player"></div>
+            <div class="board" id="dealer"></div>
+        </div>
     </div>
 
 

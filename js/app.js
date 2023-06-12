@@ -1,79 +1,173 @@
-const app = {
+const game = {
 
-    playerElem: document.getElementById('player'),
+    nbDices: null,
+
+    victory: 0,
+    defeat: 0,
+
+    ingame: false,
 
     // ---- init ----
 
-    init: function () {
-        app.playerElem;
-        app.rollDice();
-        app.listenToClickButton();
+    init() {
+        const playBtnElement = document.getElementById('play');
+        playBtnElement.addEventListener('click', game.start);
+
+        document.addEventListener('keyup', function (event) {
+            if (event.code === 'Space') {
+                game.start();
+            }
+        });
+
+        game.boardElement = document.querySelectorAll('.board');
+        game.diceNumberInputElement = document.getElementById('dice-number-input');
+        game.diceNumberInputElement.addEventListener('input', game.changeNumber);
+
+        const gameFormElement = document.getElementById('game-form');
+        gameFormElement.addEventListener('submit', game.play);
+
+        game.changeNumber();
     },
 
     // ---- functions ----
 
     /**
-     * Generate a random number
+     * Change the div
+     */
+    start() {
+        document.getElementById('welcome').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+    },
+
+    changeNumber() {
+        const diceNumberElement = document.getElementById('dice-number');
+        game.nbDices = game.diceNumberInputElement.value;
+        diceNumberElement.textContent = game.nbDices;
+    },
+
+    play(event) {
+        event.preventDefault();
+
+        if (!game.ingame) { // si on est pas déjà en cours de partie
+            game.ingame = true;
+            game.reset();
+            game.playerScore = game.createAllDices('player');
+            setTimeout(game.dealerPlay, 3000);
+            game.createCounter();
+        }
+    },
+
+    /**
+     * Delete dices et reset score
+     */
+    reset() {
+        for (let boardIndex = 0; boardIndex < game.boardElement.length; boardIndex++) {
+            game.boardElement[boardIndex].innerHTML = '';
+        }
+    },
+
+    /**
+     * Return a random number
      * @param {number} min 
      * @param {number} max 
+     * @returns 
      */
-    getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1) + min);
+    getRandom(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
     /**
-     * Generate a random number 
-     * @returns {number} - random number bewteen 1 and 6 
+     * Roll dices et return total score 
+     * @param {*} player 
+     * @returns 
      */
-    getRandomDice() {
-        return app.getRandomInt(1, 6);
+    createAllDices(player) {
+        let score = 0;
+        for (let nbDice = 0; nbDice < Number(game.nbDices); nbDice++) {
+            const diceScore = game.createDice(player);
+            score += diceScore;
+        }
+        return score;
+    },
+
+    // 
+    /**
+     * Get player index (parameter) to increase his score
+     * @param {*} player 
+     * @returns 
+     */
+    createDice(player) {
+        const diceElement = document.createElement('div');
+        const diceValue = game.getRandom(1, 6);
+        const imageOffset = (diceValue - 1) * 100;
+        diceElement.className = 'dice';
+        diceElement.textContent = '';
+        diceElement.style.backgroundPosition = '-' + imageOffset + 'px 0';
+        document.getElementById(player).appendChild(diceElement);
+        return diceValue;
     },
 
     /**
-     * Create a random dice
-     * @param {number} number 
-     * @param {string} targetId 
+     * Roll dice dealer
      */
-    createDice(number, targetId) {
-        const targetElemn = document.getElementById(targetId); /* Sélection de la div cible */
-        const diceElem = document.createElement('div'); /* Création de la div pour le dé "dice" */
-        diceElem.classList.add('dice'); /* Ajout de la classe "dice" à la div */
-        const position = (number - 1) * -100; /* Calcul du décalage horizontal en pixels */
-        diceElem.style.backgroundPositionX = `${position}px`; /* Modification du background */
-        targetElemn.appendChild(diceElem); /* Ajout de la div class="dice" à la cible */
-    },
+    dealerPlay() {
+        const dealerScore = game.createAllDices('dealer');
 
-    // ---- callback functions ----
-
-    /** 
-     * Roll dices 
-     */
-    rollDice() {
-        const numberOfDice = parseInt(prompt(`Combien de dés voulez-vous lancer ?`));
-        if (isNaN(numberOfDice) || numberOfDice <= 0) {
-            alert('Veuillez saisir un nombre valide de dés (1 et +).');
-            return;
+        if (dealerScore > game.playerScore) { // si le score de l'adversaire est plus élevé on a perdu
+            game.defeat++;
+        }
+        else if (dealerScore < game.playerScore) { // sinon on gagne
+            game.victory++;
         }
 
-        for (let i = 0; i < numberOfDice; i++) {
-            const randomIntPlayer = app.getRandomDice(); /* Génération du nombre aléatoire pour le joueur */
-            const randomIntDealer = app.getRandomDice(); /* Génération du nombre aléatoire pour le dealer */
-            app.createDice(randomIntPlayer, 'player'); /* Création du dé pour le joueur avec le selecteur id getElementById('player')*/
-            app.createDice(randomIntDealer, 'dealer'); /* Création du dé pour le dealer avec le selecteur id getElementById('dealer')*/
+        game.displayResult('player', game.victory);
+        game.displayResult('dealer', game.defeat);
+
+        game.ingame = false;
+    },
+
+    /**
+     * Display the scores
+     * @param {string} board 
+     * @param {number} counter 
+     */
+    displayResult(board, counter) {
+        const resultElement = document.createElement('div');
+        resultElement.className = 'result';
+        resultElement.textContent = counter;
+        document.getElementById(board).appendChild(resultElement);
+    },
+
+    /**
+     * Initialize counter
+     */
+    createCounter() {
+        game.counter = 3;
+        game.counterElement = document.createElement('div');
+        game.counterElement.textContent = game.counter;
+        game.counterElement.className = 'counter';
+        document.getElementById('app').appendChild(game.counterElement);
+        game.counterInterval = setInterval(game.countdown, 1000);
+    },
+
+    /**
+     * Decrement counter
+     */
+    countdown() {
+        game.counter--;
+        game.counterElement.textContent = game.counter;
+        if (game.counter === 0) {
+            game.deleteCounter();
         }
     },
 
-    // ---- listener events ----
-
-    /** 
-     * Event click button to roll dices
+    /**
+     * Delete counter and stop 
      */
-    listenToClickButton() {
-        const buttonElemn = document.getElementById('throw');
-        buttonElemn.addEventListener('click', app.rollDice);
-    }
+    deleteCounter() {
+        clearInterval(game.counterInterval);
+        game.counterElement.remove();
+    },
 };
 
-window.addEventListener('DOMContentLoaded', app.init);
+document.addEventListener('DOMContentLoaded', game.init);
